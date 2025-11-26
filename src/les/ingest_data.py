@@ -5,7 +5,7 @@ from src.logger import logging
 import pandas as pd
 
 from dataclasses import dataclass
-from sklearn.preprocessing import train_test_split
+from sklearn.model_selection import train_test_split
 
 @dataclass
 class DataIngestionConfig:
@@ -22,14 +22,14 @@ class DataIngestion():
     def read_csv(self):
         try:
             
-            self.path.base_dir.mkdir(exists_ok=True)
-            data=pd.read_csv('notebooks/stud.csv', index=False, header=True)
+            self.path.base_dir.mkdir(exist_ok=True)
+            data=pd.read_csv('notebooks/stud.csv')
             logging.info("reading source data")
-            data.to_csv(self.path.raw_data_path)
+            data.to_csv(self.path.raw_data_path, index=False, header=True)
             logging.info("data stored in raw dires")
             train_set, test_set=train_test_split(data, test_size=.2, random_state=42)
-            train_set.to_csv(self.path.train_data_path)
-            test_set.to_csv(self.path.test_data_path)
+            train_set.to_csv(self.path.train_data_path, index=False, header=True)
+            test_set.to_csv(self.path.test_data_path,index=False, header=True)
             logging.info("data split it into test and train")
             return (
                 self.path.train_data_path,
